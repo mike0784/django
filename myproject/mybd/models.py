@@ -34,6 +34,7 @@ class Order(models.Model):
     products = models.ManyToManyField(Product)
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     date_ordered = models.DateTimeField(auto_now_add=True)
+    count_product = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return f'Сумма: {self.total_price}\nДата создания: {self.date_ordered}'

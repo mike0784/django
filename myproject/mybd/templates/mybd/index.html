@@ -1,0 +1,29 @@
+{% extends 'mybd/base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+    
+    <form method="get">
+        <label>Пользователь</label>
+        <select name="user" id="user">
+            <option value="">--Выберите пользователя--</option>
+            {% for u in users %}
+            <option value="{{ u.id }}">{{ u.surname }} {{ u.name }} {{ u.patronymic }}</option>
+            {% endfor %}
+        </select>
+        <label>Период</label>
+        <select name="period" id="period">
+          <option value="">-- Выберите период --</option>
+          <option value="7">за последние 7 дней (неделю)</option>
+          <option value="30">за последние 30 дней (месяц)</option>
+          <option value="365">за последние 365 дней (год)</option>
+        </select>
+        <button>Показать</button>
+      </form>
+      <h3>{{ user.surname }} {{ user.name }} {{user.patronymic }}!</h3>
+      <h3>Выборка за последние {{ day }} дней!!!</h3>
+
+      {% for i in order %}
+          <p>Наименование продукта: {{ i.Product }}, цена: {{ i.price }}</p>
+      {% endfor %}
+{% endblock %}
