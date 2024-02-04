@@ -25,16 +25,29 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.DecimalField(max_digits = 8, decimal_places=0)
     create_at = models.DateField(auto_now_add = True)
+    image = models.ImageField(max_length=200, blank=True, null=True)
 
-    def __str__(self):
-        return f'Наименование: {self.name}\nОписание: {self.description}\nЦена: {self.price}\nКоличество: {self.quantity}\nДата создания: {self.create_at}'
+    #def __str__(self):
+    #    return f'Наименование: {self.name}\nОписание: {self.description}\nЦена: {self.price}\nКоличество: {self.quantity}\nДата создания: {self.create_at}'
+    
+    def getName(self)->str:
+        return self.name
+    
+    def getDescription(self)->str:
+        return self.description
+    
+    def getPrice(self)->float:
+        return self.price
+    
+    def getQuantity(self)->float:
+        return self.quantity
 
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    count_product = models.DecimalField(max_digits=8, decimal_places=2)
+    #count_product = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return f'Сумма: {self.total_price}\nДата создания: {self.date_ordered}'

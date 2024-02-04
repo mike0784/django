@@ -3,6 +3,7 @@ from django.views import View
 from django.http import HttpResponse
 from .models import User, Order, Product
 from datetime import datetime, timedelta
+from .forms import Product_Update
 
 class ProductsOrder(View):
     def get(self, request):
@@ -36,4 +37,43 @@ class ProductsOrder(View):
                    "orders": orders}
         #return HttpResponse(f'За последние {day} дни!!!')
         return render(request, "mybd/index.html", context)
+
+class ProductUpdate(View):
+    def get(self, request):
+        if request.method == 'POST':
+            context = {'id':request['id']}
+            return render(request, "mybd/product_update.html", context)
+        else:
+            prod_id = request.GET.get("prod_id")
+            product = Product.objects.filter(pk=int(prod_id))
+            form = Product_Update()
+            ll = list(product)
+            form.fields['id'].initial = prod_id
+            form.fields['name'].initial = ll[0].name
+            form.fields['description'].initial = ll[0].description
+            form.fields['price'].initial = ll[0].price
+            form.fields['quantity'].initial = ll[0].quantity
+            form.fields['image'].initial = ll[0].image
+            context = {'id': prod_id,
+                    "prod": product,
+                    'form': form}
+            return render(request, "mybd/product_update.html", context)
+    
+    def post(self, request):
+        if request.method == 'POST':
+            id = request.POST["id"]
+            name = request.POST["name"]
+            description = request.POST["description"]
+            price = request.POST["price"]
+            quantity = request.POST["quantity"]
+            img = request.POST["image"]
+            obj = Product.objects.filter(pk=id).first()
+            obj.name = name
+            obj.description = description
+            obj.price = price
+            obj.quantity = quantity
+            obj.image = img
+            obj.save()
+            context = {'id': request.POST["id"]}
+            return render(request, "mybd/product_update.html", context)
 
